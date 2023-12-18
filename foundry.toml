@@ -1,0 +1,20 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+# gas limit in tests
+# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
+
+[profile.fuji]
+chain_id = 43113
+eth_rpc_url = "https://api.avax-test.network/ext/bc/C/rpc"
+optimizer = true
+optimizer-runs = 800
+
+[profile.neon-devnet]
+chain_id = 245022926
+eth_rpc_url = "https://devnet.neonevm.org"
+
+[profile.polygon-mumbai]
+chain_id = 80001
+eth_rpc_url = "https://rpc-mumbai.maticvigil.com"
