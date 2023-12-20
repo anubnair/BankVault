@@ -21,3 +21,5 @@ docs/
 
 # Lockfile
 *.lock
+
+package-lock.json
