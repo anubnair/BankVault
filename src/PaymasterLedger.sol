@@ -5,7 +5,7 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-contract BankVault is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable {
+contract PaymasterLedger is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable {
     mapping(address => bool) public approvedClients;
     mapping(address => uint256) private balances;
 
