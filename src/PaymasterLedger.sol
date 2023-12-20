@@ -4,9 +4,11 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "forge-std/console.sol";
 
 contract PaymasterLedger is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable {
     mapping(address => bool) public approvedClients;
+    mapping(address => bool) public approvedContracts;
     mapping(address => uint256) private balances;
 
     event Deposit(address indexed to, uint256 amount);
@@ -36,6 +38,15 @@ contract PaymasterLedger is Initializable, OwnableUpgradeable, ReentrancyGuardUp
     }
 
     /**
+    * @dev Approves a supported contract to interact with the contract.
+    * @param _contract The Ethereum address of the _contract to be approved.
+    * @notice Only the contract owner can approve clients.
+    */
+    function approveSupportedContract(address _contract) public onlyOwner {
+        approvedContracts[_contract] = true;
+    }
+
+    /**
      * @dev Allows an approved client to deposit a specified amount to their account.
      * @param _to The Ethereum address to which the deposit is made.
      * @param _amount The amount of tokens to be deposited.
@@ -54,7 +65,7 @@ contract PaymasterLedger is Initializable, OwnableUpgradeable, ReentrancyGuardUp
      * @notice Both the initiating client or the bank owner of the 'from' address can perform this transfer.
      * @notice The 'from' address must have a sufficient balance to perform the transfer.
      */
-    function transferFrom(address _from, address _to, uint256 _amount) public onlyBankOrOwner(_from) sufficientBalance(_amount) nonReentrant {
+    function transferFrom(address _from, address _to, uint256 _amount) public onlyAuthorized(_from) sufficientBalance(_from, _amount) nonReentrant {
         balances[_from] -= _amount;
         balances[_to] += _amount;
         emit Transfer(_from, _to, _amount);
@@ -72,8 +83,13 @@ contract PaymasterLedger is Initializable, OwnableUpgradeable, ReentrancyGuardUp
         _;
     }
 
-    modifier sufficientBalance(uint256 _amount) {
-        require(balanceOf(msg.sender) >= _amount, "Insufficient balance");
+    modifier onlyAuthorized(address _client) {
+        require(_isOwner() || msg.sender == _client || approvedContracts[msg.sender], "Only authorized can perform this action");
+        _;
+    }
+
+    modifier sufficientBalance(address _from, uint256 _amount) {
+        require(balanceOf(_from) >= _amount, "Insufficient balance");
         _;
     }
 
