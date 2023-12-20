@@ -18,8 +18,18 @@ The contract includes the following main functions:
 - `deposit(address _to, uint256 _amount)`: Permits approved clients to deposit a specified amount to their account.
 - `transferFrom(address _from, address _to, uint256 _amount)`: Enables the transfer of funds between client accounts, requiring authorization from the initiating client and the bank.
 
+### Install packages needed:
 
-### Running Tests
+forge install foundry-rs/forge-std
+
+### How to compile?
+forge build
+
+### Running Tests:
+
+forge test
+
+or (can run with fork server)
 Run a fork server: anvil --rpc-url https://ethereum.publicnode.com
 Run test for BankVault: forge test --match-contract BankVaultTest -vv -w --rpc-url  http://localhost:8545
 

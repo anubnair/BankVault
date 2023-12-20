@@ -19,5 +19,21 @@ contract BankVaultTest is Test {
         vm.stopPrank();
     }
 
+    function testDeposit() public {
+        // approve a
+        vm.startPrank(deployer);
+        bankVault.approveClient(alice);
+        vm.stopPrank();
+
+        vm.startPrank(alice);
+        bankVault.deposit(bob, 1e18);
+
+        console.log("balance of alice", bankVault.balanceOf(alice));
+        console.log("balance of bob", bankVault.balanceOf(bob));
+
+        assertEq(bankVault.balanceOf(alice), 0);
+        assertEq(bankVault.balanceOf(bob), 1e18);
+        vm.stopPrank();
+    }
 
 }
