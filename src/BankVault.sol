@@ -12,8 +12,8 @@ contract BankVault is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradea
     event Deposit(address indexed to, uint256 amount);
     event Transfer(address indexed from, address indexed to, uint256 amount);
 
-    function initialize() initializer public {
-        __Ownable_init(msg.sender);
+    function initialize(address owner_) initializer public {
+        __Ownable_init(owner_);
     }
 
     /**
