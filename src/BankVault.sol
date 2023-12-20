@@ -14,6 +14,7 @@ contract BankVault is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradea
 
     function initialize(address owner_) initializer public {
         __Ownable_init(owner_);
+        __ReentrancyGuard_init();
     }
 
     /**
